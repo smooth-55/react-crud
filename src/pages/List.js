@@ -10,7 +10,7 @@ const List = () => {
 
     const getTodos = async () => {
         try {
-            const res = await axios.get("/todo");
+            let res = await axios.get("/todo");
             setTodos(res.data)
             console.log(res.data);
         } catch (error) {
@@ -19,7 +19,7 @@ const List = () => {
     };
     const handleStatusUpdate = async (id, status) => {
         try {
-            const res = await axios.put(`/todo/${id}`, { "is_completed": !status });
+            let res = await axios.put(`/todo/${id}`, { "is_completed": !status });
             console.log(res.data);
         } catch (error) {
             setIsError(error.message)
@@ -28,7 +28,7 @@ const List = () => {
 
     const handleDelete = async (id) => {
         try {
-            const res = await axios.delete(`/todo/${id}`);
+            let res = await axios.delete(`/todo/${id}`);
             console.log(res.data);
         } catch (error) {
             setIsError(error.message)
@@ -36,7 +36,7 @@ const List = () => {
     };
     useEffect(() => {
         getTodos();
-    }, [])
+    }, [todos])
 
     return (
         <>

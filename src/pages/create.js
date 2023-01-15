@@ -8,7 +8,7 @@ const Create = () => {
     const handleCreateTodo = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("/todo", { "task": taskName, "is_completed": false });
+            let res = await axios.post("/todo", { "task": taskName, "is_completed": false });
             console.log(res.data);
         } catch (error) {
             alert(error)
