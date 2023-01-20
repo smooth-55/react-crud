@@ -21,9 +21,8 @@
 }
 
 #submit {
-    padding: 10px;
-    margin-top: 5px;
-    width: 18rem;
+    padding: 11px;
+    margin: 5px 0px 0px 5px;
 }
 
 #status, #submit {
