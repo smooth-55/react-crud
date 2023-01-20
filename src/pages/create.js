@@ -11,14 +11,6 @@ const Create = () => {
     is_completed: false,
   };
 
-  const formik = useFormik({
-    validationSchema: Schema,
-    initialValues: initialValues,
-    onSubmit: (values, action) => {
-      handleCreateTodo(values, action);
-      action.resetForm({ values: initialValues });
-    },
-  });
   const handleCreateTodo = (values) => {
     try {
       console.log(values, "fn valies");
@@ -27,6 +19,15 @@ const Create = () => {
       alert(error);
     }
   };
+
+  const formik = useFormik({
+    validationSchema: Schema,
+    initialValues: initialValues,
+    onSubmit: (values, action) => {
+      handleCreateTodo(values, action);
+      action.resetForm({ values: initialValues });
+    },
+  });
 
   return (
     <>
