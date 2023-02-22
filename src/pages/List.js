@@ -1,16 +1,11 @@
-import axios from "../axios.jsx";
-import React from "react";
+import { useDeleteTodoMutation, useFetchTodoQuery, useUpdateStatusMutation } from "../services";
 import "./List.css";
-import { useQuery } from "react-query";
 
 const List = () => {
-  const getTodos = async () => {
-    try {
-      let res = await axios.get("/todo");
-      return res.data;
-    } catch (error) {}
-  };
-  const { isLoading, error, data } = useQuery("list", getTodos);
+
+  const { isLoading, data, isError, error } = useFetchTodoQuery()
+  const { mutate: deleteMutate } = useDeleteTodoMutation()
+  const { mutate: updateMutate } = useUpdateStatusMutation()
 
   if (isLoading) {
     return (
@@ -21,7 +16,7 @@ const List = () => {
       </>
     );
   }
-  if (error) {
+  if (isError) {
     return (
       <>
         <div style={{ display: "grid", placeItems: "center" }}>
@@ -34,7 +29,10 @@ const List = () => {
     <>
       <div className="my__todos">
         <h2>My TODOS</h2>
+        <h2>Total data: {data?.data?.count}</h2>
+
         <table>
+
           <thead>
             <tr>
               <th>S.N</th>
@@ -44,7 +42,7 @@ const List = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.data.map((item, index) => {
+            {data?.data?.data.map((item, index) => {
               return (
                 <tr key={item.id}>
                   <td>{index + 1}</td>
@@ -53,6 +51,10 @@ const List = () => {
                   <td>
                     <div className="completed__status">
                       <button
+                        onClick={() => {
+                          updateMutate(
+                            { id: item.id, is_completed: !item.is_completed })
+                        }}
                         style={{
                           marginRight: "10px",
                           padding: "10px",
@@ -62,8 +64,7 @@ const List = () => {
                           color: "#ffffff",
                         }}
                       >
-                        {" "}
-                        Mark as {item.is_completed ? "Pending" : "Done"}{" "}
+                        Mark as {item.is_completed ? "Pending" : "Done"}
                       </button>
                       <button
                         style={{
@@ -73,6 +74,9 @@ const List = () => {
                           backgroundColor: "#cf0000",
                           cursor: "pointer",
                           color: "#ffffff",
+                        }}
+                        onClick={() => {
+                          deleteMutate(item.id)
                         }}
                       >
                         Delete

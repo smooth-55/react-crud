@@ -1,9 +1,8 @@
-import React, { useState } from "react";
 import "./Create.css";
-import axios from "../axios.jsx";
 import { useFormik } from "formik";
 import { Schema } from "../schemas";
 import { Error } from "../components/Error";
+import { useCreateTodoMutation } from "../services";
 
 const Create = () => {
   const initialValues = {
@@ -11,21 +10,16 @@ const Create = () => {
     is_completed: false,
   };
 
-  const handleCreateTodo = (values) => {
-    try {
-      console.log(values, "fn valies");
-      axios.post("/todo", values);
-    } catch (error) {
-      alert(error);
-    }
-  };
+  const {mutate: mutateTodo} = useCreateTodoMutation()
+
+
 
   const formik = useFormik({
     validationSchema: Schema,
     initialValues: initialValues,
     onSubmit: (values, action) => {
-      handleCreateTodo(values, action);
-      action.resetForm({ values: initialValues });
+      mutateTodo(values)
+      console.log(values);
     },
   });
 
