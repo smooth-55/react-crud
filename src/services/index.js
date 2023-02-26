@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import axios from "../axios.jsx";
-
+import { notification } from 'antd';
 
 const addTodoService = (newTodo) => {
     return axios.post(`/todo`, newTodo)
@@ -20,11 +20,12 @@ const deleteOneTodoService = (id) => {
 
 export const useFetchTodoQuery = () => {
     return useQuery("get-todos", fetchTodoService, {
-        onSuccess: () => {
-            console.log("Successfully fetched")
-        },
         onError: (error) => {
             console.log("Something went wrong while fetching", error)
+
+            notification.error({
+                message: error?.message
+            })
         },
 
     })
@@ -36,11 +37,16 @@ export const useCreateTodoMutation = () => {
     return useMutation(
         addTodoService,
         {
-            onSuccess: () => {
+            onSuccess: (data) => {
+                notification.success({
+                    message: data?.data.msg
+                })
                 queryClient.invalidateQueries('get-todos')
             },
-            onError: () => {
-                console.log("Something went wrong");
+            onError: (error) => {
+                notification.error({
+                    message: error?.message
+                })
             }
         }
 
@@ -52,12 +58,16 @@ export const useUpdateStatusMutation = () => {
     return useMutation(
         updateOneTodoService,
         {
-            onSuccess: () => {
-                console.log("Status updated");
+            onSuccess: (data) => {
+                notification.success({
+                    message: data?.data.msg
+                })
                 queryClient.invalidateQueries('get-todos')
             },
-            onError: () => {
-                console.log("Error occured while updating");
+            onError: (error) => {
+                notification.error({
+                    message: error?.message
+                })
             }
         }
     )
@@ -68,11 +78,16 @@ export const useDeleteTodoMutation = () => {
     return useMutation(
         deleteOneTodoService,
         {
-            onSuccess: () => {
+            onSuccess: (data) => {
+                notification.success({
+                    message: data?.data.msg
+                })
                 queryClient.invalidateQueries('get-todos')
             },
-            onError: () => {
-                console.log("Something went wrong");
+            onError: (error) => {
+                notification.error({
+                    message: error?.message
+                })
             }
         }
     )

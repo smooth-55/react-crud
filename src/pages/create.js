@@ -10,8 +10,7 @@ const Create = () => {
     is_completed: false,
   };
 
-  const {mutate: mutateTodo} = useCreateTodoMutation()
-
+  const { mutate: mutateTodo } = useCreateTodoMutation()
 
 
   const formik = useFormik({
@@ -19,7 +18,7 @@ const Create = () => {
     initialValues: initialValues,
     onSubmit: (values, action) => {
       mutateTodo(values)
-      console.log(values);
+      action.resetForm()
     },
   });
 
